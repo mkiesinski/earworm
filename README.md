@@ -14,10 +14,12 @@ audio
 * mp3
 * wav
 * ogg
+
 video
 * webm
 * mkv
 * mp4
+
 images
 * png
 * gif
