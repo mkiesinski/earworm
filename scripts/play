@@ -1,0 +1,2 @@
+./scripts/ffmpeg-show-volume ${1}
+./scripts/ffplay-headless ${1} &> /dev/null

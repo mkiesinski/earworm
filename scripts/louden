@@ -1,0 +1,7 @@
+#!/bin/bash
+
+tmpdir=$(mktemp -d)
+
+cp ${1} ${tmpdir}/
+
+ffmpeg -y -i ${tmpdir}/* -c:v copy -af "volume=${2}dB" ${1}

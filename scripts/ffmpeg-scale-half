@@ -1,0 +1,11 @@
+#!/bin/bash
+
+tmpdir=$(mktemp -d)
+
+cp ${1} ${tmpdir}/
+
+ffmpeg -y -i ${tmpdir}/* -vf scale="iw/2:ih/2" ${1}
+
+#
+#   -vf 'crop=iw-500:ih,scale=iw/4:ih/4'
+#

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+TEMP=$(mktemp)
+
+ffmpeg -i ${1} -af "volumedetect" -vn -sn -dn -f null /dev/null &> ${TEMP}
+
+cat ${TEMP} | grep 'Parsed_volumedetect_0' | sed 's/.*\] //g'

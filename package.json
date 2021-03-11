@@ -1,0 +1,45 @@
+{
+  "name": "alerts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack serve",
+    "test": "jest src/",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexjpaz-twitch/alerts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexjpaz-twitch/alerts/issues"
+  },
+  "homepage": "https://github.com/alexjpaz-twitch/alerts#readme",
+  "devDependencies": {
+    "@babel/core": "^7.13.8",
+    "@babel/plugin-transform-runtime": "^7.13.9",
+    "@babel/preset-env": "^7.13.9",
+    "@babel/preset-react": "^7.12.13",
+    "babel-loader": "^8.2.2",
+    "chai": "^4.2.0",
+    "comfy.js": "^1.1.6",
+    "copy-webpack-plugin": "^7.0.0",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^4.5.1",
+    "jest": "^26.6.3",
+    "mocha": "^8.2.1",
+    "sinon": "^9.2.3",
+    "val-loader": "^3.0.0",
+    "webpack": "^5.12.3",
+    "webpack-cli": "^4.3.1",
+    "webpack-dev-server": "^3.11.1"
+  },
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}

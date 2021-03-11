@@ -1,0 +1,340 @@
+const ComfyJS = require('comfy.js');
+
+const baseUrl = './media';
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+class MediaPlayer {
+  constructor(mediaIndexUrl) {
+    this.mediaIndexUrl = mediaIndexUrl;
+  }
+
+  async testInteraction() {
+    const interactionTestElement = document.querySelector('#interaction-test');
+
+    if(!interactionTestElement) {
+      return;
+    }
+
+    interactionTestElement.onclick = () => {
+      interactionTestElement.style.display = 'none';
+    };
+
+    try {
+      const a = new Audio();
+      await a.play();
+    } catch(e) {
+      console.log(e);
+      interactionTestElement.style.display = 'block';
+    }
+  }
+
+  async init() {
+    this.testInteraction();
+
+    const mediaIndex = await fetch(this.mediaIndexUrl)
+      .then(r => r.json())
+      .then(j => j.media);
+    ;
+
+    this.mediaIndex = mediaIndex;
+
+    this.isPlaying = false;
+    this.playlist = [];
+
+
+    ComfyJS.onCommand = async ( user, command, message, flags, extra ) => {
+
+      // Check cooldown
+      if(!!extra && !!extra.sinceLastCommand && extra.sinceLastCommand.user !== 0 && extra.sinceLastCommand.user <= 1000) {
+        return;
+      }
+
+      if(/sfx/.test(command)) {
+        await this.listSfx(user, command, message, flags, extra);
+      } else {
+        if(/^[0-9]+/.test(message)) {
+          command = command + message;
+        }
+
+        if(/^r$/.test(command)) {
+          command = ""; // random
+        }
+
+        await this.commandAlert(command);
+      }
+    }
+
+    const twitchChannel = new URLSearchParams(location.search).get("twitch_channel");
+    const twitchToken = new URLSearchParams(location.search).get("twitch_token");
+
+    if(twitchToken) {
+      ComfyJS.Init( twitchChannel, twitchToken );
+    } else {
+      ComfyJS.Init( twitchChannel );
+    }
+  }
+
+  async commandAlert(alert) {
+    let media = this.mediaIndex[alert];
+
+
+    if(!media) {
+      // Try to match with if there is a number
+      const pattern = new RegExp("^"+alert+"([0-9]+)");
+
+      const matches = Object.keys(this.mediaIndex)
+        .filter((key) => pattern.test(key))
+
+      const mediaKey = matches[Math.floor(Math.random() * matches.length)];
+
+      media = this.mediaIndex[mediaKey];
+    }
+
+    if(media) {
+      this.queueAlert(`${baseUrl}/${media.url}`);
+    }
+  };
+
+
+  getMediaHandler(key) {
+    const root = document.querySelector('body');
+
+    const mediaHandler = {
+      audio: async (alert) => {
+        const audio = new Audio(alert.key);
+
+        const playPromise = new Promise((res, rej) => {
+          audio.onended = res;
+          audio.onerror = rej;
+          audio.play();
+        });
+
+        await playPromise;
+      },
+      video: async (alert) => {
+        const video = document.createElement('video');
+
+        const source = document.createElement('source');
+        source.src = alert.key
+        source.type = "video/webm";
+
+        video.appendChild(source);
+
+        root.appendChild(video);
+
+        const playPromise = new Promise((res, rej) => {
+          video.onended = res;
+          video.onerror = rej;
+          video.play();
+        });
+
+        try {
+          await playPromise;
+        } finally {
+          video.remove();
+        }
+      },
+      image: async (alert) => {
+        const image = document.createElement('img');
+        image.src = alert.key;
+
+        root.appendChild(image);
+
+        const playPromise = new Promise((res) => {
+          setTimeout(res, 5000);
+        });
+
+        try {
+          await playPromise;
+        } finally {
+          root.removeChild(image);
+        }
+      }
+    }
+
+    return mediaHandler[key];
+  }
+
+  async nextAlert () {
+
+    if(this.playlist.length == 0) {
+      return;
+    }
+
+    const alert = this.playlist.shift();
+
+    this.isPlaying = true;
+
+    try {
+      let playPromise = [];
+
+      if(alert.type === 'composite') {
+        // TBD
+      } else {
+        const handler = this.getMediaHandler(alert.type);
+
+        playPromise.push(handler(alert));
+      }
+
+      await Promise.all(playPromise);
+
+
+    } catch(e) {
+      console.error(e);
+    }
+
+    this.isPlaying = false;
+
+    // TODO - do we need to wait?
+    this.nextAlert();
+  };
+
+  async queueAlert(key) {
+    let alert = {
+      key,
+    };
+
+    if(key.endsWith(".webm")) {
+      alert.type = "video";
+    } else if(key.endsWith(".mp4")) {
+      alert.type = "video";
+    } else if(key.endsWith(".gif")) {
+      alert.type = "image";
+    } else if(key.endsWith(".png")) {
+      alert.type = "image";
+    } else {
+      alert.type = "audio";
+    }
+
+    this.playlist.push(alert);
+
+    if(!this.isPlaying) {
+      this.nextAlert();
+    }
+  };
+
+  async commandAlert(alert) {
+    let media = this.mediaIndex[alert];
+
+    if(!media) {
+      // Try to match with if there is a number
+      const pattern = new RegExp("^"+alert+"([0-9]+)");
+
+      const matches = Object.keys(this.mediaIndex)
+        .filter((key) => pattern.test(key))
+
+      const mediaKey = matches[Math.floor(Math.random() * matches.length)];
+
+      media = this.mediaIndex[mediaKey];
+    }
+
+    if(media) {
+      this.queueAlert(`${baseUrl}/${media.url}`);
+    }
+  };
+
+
+  async listSfx(user, command, message, flags, extra) {
+
+    let keys = Object.keys(this.mediaIndex);
+
+    let totalKeys = keys.length;
+
+    keys = keys
+      .filter(k => k)
+      .filter(k => k !== '')
+    ;
+
+    if(message === 'latest') {
+
+      keys = keys.sort((a,b) => {
+        const aa = this.mediaIndex[a].mtime;
+        const bb = this.mediaIndex[b].mtime;
+        return bb.localeCompare(aa);
+      });
+    } else {
+
+      let groups = {};
+
+      keys = keys
+        .map((k) => {
+          const matches = k.match(/([a-zA-Z]+)([0-9]+)/);
+
+          if(!matches) {
+            return k;
+          }
+
+          if(!groups[matches[1]]) {
+            groups[matches[1]] = 0
+          }
+
+          groups[matches[1]] += 1;
+        });
+
+      keys = keys.filter(k => k);
+
+      Object.keys(groups).forEach((g) => {
+        keys.push(`${g}[1-${groups[g]}]`);
+      });
+
+      const filterText = message;
+
+      if(filterText) {
+        keys = keys.filter(function(k) { return k.indexOf(filterText) >= 0 });
+      } else {
+        keys = shuffle(keys);
+      }
+    }
+
+    var selected  = [];
+
+    for(var i=0; i < keys.length; i++) {
+      if(selected.join(", ").length > 400) {
+        continue;
+      }
+
+      selected.push(keys[i]);
+    }
+
+    selected = selected.map(function(i) {
+      return "!"+i;
+    });
+
+    // Don't sort, it helps with the shuffle
+    //selected.sort();
+
+    var output = "/me KAPOW " + selected.join(", ");
+
+    output += " ("+selected.length+"/"+totalKeys+")";
+
+    ComfyJS.Say(output);
+  };
+}
+
+const MediaPlayerBuilder = async (mediaIndexUrl) => {
+  const player = new MediaPlayer(mediaIndexUrl);
+
+  await player.init();
+
+  return player;
+}
+
+export default MediaPlayerBuilder;
