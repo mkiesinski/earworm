@@ -1,5 +1,5 @@
 {
-  "name": "alerts",
+  "name": "earworm",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexjpaz-twitch/alerts.git"
+    "url": "git+https://github.com/alexjpaz-twitch/earworm.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/alexjpaz-twitch/alerts/issues"
+    "url": "https://github.com/alexjpaz-twitch/earworm/issues"
   },
-  "homepage": "https://github.com/alexjpaz-twitch/alerts#readme",
+  "homepage": "https://github.com/alexjpaz-twitch/earworm#readme",
   "devDependencies": {
     "@babel/core": "^7.13.8",
     "@babel/plugin-transform-runtime": "^7.13.9",
