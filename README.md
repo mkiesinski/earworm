@@ -2,6 +2,8 @@
 
 > A spammy sfx chat bot
 
+### [View a demo](https://alexjpaz-twitch.github.io/earworm/?twitch_channel=mychannel)
+
 ### [Very professional architecture diagram](https://user-images.githubusercontent.com/899367/110877061-c36fd400-82a6-11eb-9850-136023f97006.png)
 
 ## What is this?
