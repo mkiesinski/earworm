@@ -40,11 +40,13 @@ Image media files contain no audio and will display for a default of 5 seconds i
 
 ## Hosting
 
-Because of certain security restrictions the chat bot needs a secure connection to the twich irc chat. 
+Because of certain security restrictions the chat bot needs a secure connection to the twich irc chat.
+
+## Using GitHub Pages
 
 ## Local Hosting
 
-Local hosting will require you to build the application and [host the files on a http server](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server)/
+Local hosting will require you to build the application and [host the files on a http server](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server). You may also choose to host these files using a cloud service such as [AWS S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html) or [Netlify](https://www.netlify.com/)
 
 1. Clone or download this repository
 
