@@ -10,6 +10,8 @@ Media files are indexed from the `media/` folder in this project. Media placed i
 
 The application will detect the format of the media file by the extension (e.g. `mp3` for audio, `webm` for `video`, etc) and play the file. Media requests are queued and will play concurrently until all commands are dequeued.
 
+There is also a built-in `!sfx` command that will list random sound effects. They can also be filtered but adding a filter text (e.g. `!sfx <filter>`. Latest alerts can also be  viewed by using the special `latest` filter.
+
 ### Supported Formats
 
 #### Audio 
@@ -35,6 +37,14 @@ Image media files contain no audio and will display for a default of 5 seconds i
 * png
 * gif
 * jpeg
+
+## Why was this made?
+
+There are a few reasons I decided to roll my own vs. using a off the shelf solution such as NightBot, Phantombot, or SoundAlerts.
+
+* The HTML web application can connect anonymously without a token or password. This means that even if the token expires I didn't need to reauthenticate and redeploy to get the bot to work. This is crucial as this is one less thing to worry about when streaming
+* Adding sound commands and take multiple steps. Typically the media file needs to be added, the command added, the cooldown settings configured etc. This project only requires that you follow a filename convention to add a media file.
+* The HTML web application does not require a separate process to run. Once you have hosted the application and added the OBS source the chat bot will automtically start and connect.
 
 ## How do I use this?
 
