@@ -2,7 +2,7 @@
 
 > A spammy sfx chat bot
 
-![image](https://user-images.githubusercontent.com/899367/110877061-c36fd400-82a6-11eb-9850-136023f97006.png)
+### [Very professional architecture diagram](https://user-images.githubusercontent.com/899367/110877061-c36fd400-82a6-11eb-9850-136023f97006.png)
 
 
 ## Usage
