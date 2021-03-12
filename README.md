@@ -34,11 +34,15 @@ npm build
 
 The `dist/` folder will contain static files that can be uploaded to an http server (or S3).
 
-4. [Generate a twitch token (optional)](./#Generating-OAuth-Token)
+4. [Generate a twitch token (optional)](./#generating-oauth-token)
 
 5. Add your browser source to point to the root of web folder
 
 Be sure to add `twitch_channel` and `twitch_token` in the query parameters
+
+```
+https://your-server/?twich_channel=yourname&twitch_token=123abc
+```
 
 ### Generating OAuth Token
 
