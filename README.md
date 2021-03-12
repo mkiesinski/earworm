@@ -40,11 +40,21 @@ Image media files contain no audio and will display for a default of 5 seconds i
 
 You will need to host the web application somewhere (e.g. locally or on S3) and add the [Browswer Source](https://obsproject.com/wiki/Sources-Guide#browsersource) to OBS.
 
-### Hosting
-
 Because of certain security restrictions the chat bot needs a secure connection to the twich irc chat.
 
 For either solution you can optionally [generate a twitch token ](./#generating-oauth-token) so the chat bot can respond to chat.
+
+Once hosted and added to OBS you can join your twitch channale and use the `!chime` command. You should then hear the test sound effect.
+
+#### Using Netlify
+
+[Netlify](https://app.netlify.com/start) is a Platform as a service (PaaS) that has a built-in Git Workflow and CDN for serving assets.
+
+*Note: it is recommened to that create a private fork so that you can begin to add files from your repository*
+
+<a href="https://app.netlify.com/start">
+  <img src="https://www.netlify.com/img/deploy/button.svg" title="Deploy to Netlify">
+</a>
 
 #### Using GitHub Pages
 
