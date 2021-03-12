@@ -6,7 +6,7 @@
 
 ## Features
 
-This project is a twitch irc chat bot built using [ComfyJS](https://github.com/instafluff/ComfyJS) and [tmi.js](https://github.com/tmijs). The chat bot will listen for chat commands (messages that start with `!`) and attempt to find a matching media file.
+This project is a [twitch irc chat bot](https://dev.twitch.tv/docs/irc/guide) built using [ComfyJS](https://github.com/instafluff/ComfyJS) and [tmi.js](https://github.com/tmijs). The chat bot will listen for chat commands (messages that start with `!`) and attempt to find a matching media file.
 
 Media files are indexed from the `media/` folder in this project. Media placed in sub-folders will be grouped into a single command prefix. If a media file cannot be found from a it will attempt to find a matching media file from a prefix.
 
