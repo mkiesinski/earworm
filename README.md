@@ -2,10 +2,6 @@
 
 > A spammy sfx chat bot
 
-### [View a demo](https://alexjpaz-twitch.github.io/earworm/?twitch_channel=mychannel)
-
-### [Very professional architecture diagram](https://user-images.githubusercontent.com/899367/110877061-c36fd400-82a6-11eb-9850-136023f97006.png)
-
 ## What is this?
 
 This project is a [twitch irc chat bot](https://dev.twitch.tv/docs/irc/guide) built using [ComfyJS](https://github.com/instafluff/ComfyJS) and [tmi.js](https://github.com/tmijs). The chat bot will listen for chat commands (messages that start with `!`) and attempt to find a matching media file.
@@ -110,3 +106,9 @@ https://your-server/?twich_channel=yourname&twitch_token=123abc
 ```
 channel:manage:redemptions channel:read:redemptions user:read:email chat:edit chat:read
 ```
+
+# Misc
+
+### [View a demo](https://alexjpaz-twitch.github.io/earworm/?twitch_channel=mychannel)
+
+### [Very professional architecture diagram](https://user-images.githubusercontent.com/899367/110877061-c36fd400-82a6-11eb-9850-136023f97006.png)
