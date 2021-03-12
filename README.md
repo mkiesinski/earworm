@@ -44,6 +44,8 @@ You will need to host the web application somewhere (e.g. locally or on S3) and 
 
 Because of certain security restrictions the chat bot needs a secure connection to the twich irc chat.
 
+For either solution you can optionally [generate a twitch token ](./#generating-oauth-token) so the chat bot can respond to chat.
+
 #### Using GitHub Pages
 
 You can benefit from using [GitHub Pages](https://guides.github.com/features/pages/) as a host by [forking](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) this project. 
