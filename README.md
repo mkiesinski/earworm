@@ -4,7 +4,7 @@
 
 ### [Very professional architecture diagram](https://user-images.githubusercontent.com/899367/110877061-c36fd400-82a6-11eb-9850-136023f97006.png)
 
-## Features
+## What is this?
 
 This project is a [twitch irc chat bot](https://dev.twitch.tv/docs/irc/guide) built using [ComfyJS](https://github.com/instafluff/ComfyJS) and [tmi.js](https://github.com/tmijs). The chat bot will listen for chat commands (messages that start with `!`) and attempt to find a matching media file.
 
@@ -38,11 +38,15 @@ Image media files contain no audio and will display for a default of 5 seconds i
 * gif
 * jpeg
 
-## Hosting
+## How do I use this?
+
+You will need to host the web application somewhere (e.g. locally or on S3) and add the [Browswer Source](https://obsproject.com/wiki/Sources-Guide#browsersource) to OBS.
+
+### Hosting
 
 Because of certain security restrictions the chat bot needs a secure connection to the twich irc chat.
 
-## Using GitHub Pages
+#### Using GitHub Pages
 
 You can benefit from using [GitHub Pages](https://guides.github.com/features/pages/) as a host by [forking](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) this project. However, once you fork this project you will need to [enable GitHub pages](https://docs.github.com/en/github/working-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) for the `gh-pages` branch. 
 
@@ -52,7 +56,7 @@ Once built you can navigate to the GitHub Pages (currently on the right-hand pan
 
 Media files can be added via the [GitHub UI](https://docs.github.com/en/github/managing-files-in-a-repository/adding-a-file-to-a-repository) or the [git cli](https://docs.github.com/en/github/managing-files-in-a-repository/adding-a-file-to-a-repository-using-the-command-line)
 
-## Local Hosting
+#### Local Hosting
 
 Local hosting will require you to build the application and [host the files on a http server](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server). You may also choose to host these files using a cloud service such as [AWS S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html) or [Netlify](https://www.netlify.com/)
 
@@ -81,7 +85,7 @@ Be sure to add `twitch_channel` and `twitch_token` in the query parameters
 https://your-server/?twich_channel=yourname&twitch_token=123abc
 ```
 
-### Generating OAuth Token
+## Generating OAuth Token
 
 1. Navtivate to https://dev.twitch.tv/console/apps/create
 
