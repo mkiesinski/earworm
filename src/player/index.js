@@ -1,4 +1,5 @@
 const ComfyJS = require('comfy.js');
+import getDndCharacter from './dnd';
 
 const baseUrl = './media';
 
@@ -19,6 +20,35 @@ function shuffle(array) {
   }
 
   return array;
+}
+
+class timedMessages {
+  constructor() {
+      this.count = 0;
+      this.pointer = 0;
+      this.timer = 20;
+      
+      this.messages = [
+          `Type !sfx to list available sound commands. You can also use !sfx latest for recently added sound commands.`,
+          `Available commands: !sfx, !dndcaracter`
+      ];
+  }
+
+  shouldSendMessage() {
+      if( this.count === this.timer ) {
+          this.count = 0;
+          return true;
+      } else {
+          this.count += 1;
+          return false;
+      }
+  }
+
+  getNextMessage() {
+      const message = this.messages[this.pointer % this.messages.length];
+      this.pointer += 1;
+      return message;
+  }
 }
 
 export class MediaPlayer {
@@ -60,6 +90,14 @@ export class MediaPlayer {
     this.isPlaying = false;
     this.playlist = [];
 
+    const TM = new timedMessages();
+
+    ComfyJS.onChat = async ( user, message, flags, self, extra ) => {
+      if( TM.shouldSendMessage() ) {
+        ComfyJS.Say(TM.getNextMessage());
+      }
+    }
+
 
     ComfyJS.onCommand = async ( user, command, message, flags, extra ) => {
 
@@ -70,6 +108,8 @@ export class MediaPlayer {
 
       if(/sfx/.test(command)) {
         await this.listSfx(user, command, message, flags, extra);
+      } if(/dndcharacter/.test(command)) {
+        ComfyJS.Say(getDndCharacter(user));
       } else {
         if(/^[0-9]+/.test(message)) {
           command = command + message;
@@ -81,6 +121,15 @@ export class MediaPlayer {
 
         if(/^r$/.test(command)) {
           command = ""; // random
+        }
+
+        if(/pocketsand/.test(command)) {
+          ComfyJS.Say(`/me has moved into @${user}'s pocketsand!`);
+          ComfyJS.Say(`YAOW!`);
+        }
+  
+        if(/alexjpaz/.test(command)) {
+          ComfyJS.Say('Many thanks to the friend of the stream @alexjpaz! Make sure you spin to his channel at https://twitch.tv/alexjpaz and donate some sand! GorillaSpin');
         }
 
         await this.commandAlert(command);
