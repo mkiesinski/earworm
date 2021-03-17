@@ -121,9 +121,12 @@ class MediaPlayer {
       composite: async (alert, muted, timeout) => {
         let playPromise = [];
 
-        alert.key.forEach((alert, index) => {
+        alert
+          .key
+          .reverse()
+          .forEach((alert, index) => {
           const handler = this.getMediaHandler(alert.type);
-          playPromise.push(handler(alert, index === 0, 5000));
+          playPromise.push(handler(alert, index !== 0, 5000));
         });
 
         return Promise.all(playPromise);
