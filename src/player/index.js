@@ -118,23 +118,48 @@ class MediaPlayer {
     const root = document.querySelector('body');
 
     const mediaHandler = {
-      audio: async (alert) => {
+      composite: async (alert, muted, timeout) => {
+        let playPromise = [];
+
+        alert.key.forEach((alert, index) => {
+          const handler = this.getMediaHandler(alert.type);
+          playPromise.push(handler(alert, index === 0, 5000));
+        });
+
+        return Promise.all(playPromise);
+      },
+      audio: async (alert, muted, timeout = null) => {
+        if(muted) {
+          return;
+        }
+
         const audio = new Audio(alert.key);
 
         const playPromise = new Promise((res, rej) => {
           audio.onended = res;
           audio.onerror = rej;
           audio.play();
+
+          if(timeout) {
+            setTimeout(() => {
+              audio.pause();
+              res()
+            }, timeout);
+          }
         });
 
         await playPromise;
       },
-      video: async (alert) => {
+      video: async (alert, muted, timeout = null) => {
         const video = document.createElement('video');
 
         const source = document.createElement('source');
         source.src = alert.key
         source.type = "video/webm";
+
+        if(muted) {
+          video.muted = true;
+        }
 
         video.appendChild(source);
 
@@ -144,6 +169,13 @@ class MediaPlayer {
           video.onended = res;
           video.onerror = rej;
           video.play();
+
+          if(timeout) {
+            setTimeout(() => {
+              video.pause();
+              res();
+            }, timeout);
+          }
         });
 
         try {
@@ -152,14 +184,14 @@ class MediaPlayer {
           video.remove();
         }
       },
-      image: async (alert) => {
+      image: async (alert, muted, timeout = 5000) => {
         const image = document.createElement('img');
         image.src = alert.key;
 
         root.appendChild(image);
 
         const playPromise = new Promise((res) => {
-          setTimeout(res, 5000);
+          setTimeout(res, timeout);
         });
 
         try {
@@ -186,13 +218,9 @@ class MediaPlayer {
     try {
       let playPromise = [];
 
-      if(alert.type === 'composite') {
-        // TBD
-      } else {
-        const handler = this.getMediaHandler(alert.type);
+      const handler = this.getMediaHandler(alert.type);
 
-        playPromise.push(handler(alert));
-      }
+      playPromise.push(handler(alert));
 
       await Promise.all(playPromise);
 
@@ -205,23 +233,42 @@ class MediaPlayer {
 
     // TODO - do we need to wait?
     this.nextAlert();
-  };
+  }
+
+  determineAlertType(key) {
+    let type = "unknown";
+
+    if(key.endsWith(".webm")) {
+      type = "video";
+    } else if(key.endsWith(".mp4")) {
+      type = "video";
+    } else if(key.endsWith(".gif")) {
+      type = "image";
+    } else if(key.endsWith(".png")) {
+      type = "image";
+    } else {
+      type = "audio";
+    }
+
+    return type;
+  }
 
   async queueAlert(key) {
     let alert = {
       key,
     };
 
-    if(key.endsWith(".webm")) {
-      alert.type = "video";
-    } else if(key.endsWith(".mp4")) {
-      alert.type = "video";
-    } else if(key.endsWith(".gif")) {
-      alert.type = "image";
-    } else if(key.endsWith(".png")) {
-      alert.type = "image";
+    if(Array.isArray(key)) {
+      alert.type = "composite";
+      alert.key = key.map((k) => {
+        return {
+          key: k,
+          type: this.determineAlertType(k),
+        }
+      });
+          console.log(alert);
     } else {
-      alert.type = "audio";
+      alert.type = this.determineAlertType(key);
     }
 
     this.playlist.push(alert);
@@ -246,8 +293,21 @@ class MediaPlayer {
       media = this.mediaIndex[mediaKey];
     }
 
-    if(media) {
-      this.queueAlert(`${baseUrl}/${media.url}`);
+    if(alert.includes("+")) {
+      media = alert.split("+")
+        .map((m) => this.mediaIndex[m])
+        .map((m) => `${baseUrl}/${m.url}`)
+      ;
+
+      if(media.length !== 2) {
+        media = null;
+      }
+
+      this.queueAlert(media);
+    } else {
+      if(media) {
+        this.queueAlert(`${baseUrl}/${media.url}`);
+      }
     }
   };
 

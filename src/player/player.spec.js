@@ -116,6 +116,36 @@ describe('MediaPlayerBuilder', () => {
       expect(body.innerHTML).toContain(alert.key);
 
     });
+
+    test('composite', async () => {
+      const alert = {
+        type: 'composite',
+        key: [
+          {
+            type: 'image',
+            key: 'foo.gif',
+          },
+          {
+            type: 'audio',
+            key: 'foo.ogg',
+          },
+        ]
+      };
+
+      const handler = player.getMediaHandler(alert.type);
+
+      const p = handler(alert);
+
+      const body = document.querySelector('body');
+
+      expect(body.innerHTML).toContain(`<img`);
+      expect(body.innerHTML).toContain(alert.key[0].key);
+
+      await p;
+
+      expect(Audio.prototype.play).toHaveBeenCalled();
+
+    });
   });
 
   describe('onCommand', () => {
@@ -316,6 +346,34 @@ describe('MediaPlayerBuilder', () => {
       expect(player.queueAlert).toHaveBeenCalledWith("./media/foo1");
     });
 
+    test('queue sfx multiple', async () => {
+      fetch.mockImplementationOnce(() => Promise.resolve({
+        json: () => Promise.resolve({
+          media: {
+            "foo1": {
+              url: "foo"
+            },
+            "foo2": {
+              url: "foo"
+            },
+            "bar": {
+              url: "bar"
+            }
+          }
+        })
+      }));
+
+      const player = await MediaPlayer("http://example.com/foo.json");
+
+      player.queueAlert = jest.fn();
+
+      await ComfyJSMock.onCommand("FAKEUSER", "foo1+foo2", "");
+
+      expect(player.queueAlert).toHaveBeenCalledWith([
+        "./media/foo",
+        "./media/foo",
+      ]);
+    });
 
   });
 
