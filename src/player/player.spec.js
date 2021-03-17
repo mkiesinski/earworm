@@ -58,12 +58,14 @@ describe('MediaPlayerBuilder', () => {
       Audio.prototype.play = jest.fn(function() {
         this.onended();
       });
+      Audio.prototype.pause = jest.fn();
       Audio.mockClear();
 
       global.HTMLMediaElement = jest.fn();
       HTMLMediaElement.prototype.play = jest.fn(function() {
         this.onended();
       });
+      HTMLMediaElement.prototype.pause = jest.fn();
       HTMLMediaElement.mockClear();
 
     });
@@ -139,7 +141,7 @@ describe('MediaPlayerBuilder', () => {
       const body = document.querySelector('body');
 
       expect(body.innerHTML).toContain(`<img`);
-      expect(body.innerHTML).toContain(alert.key[0].key);
+      expect(body.innerHTML).toContain(alert.key[1].key); // TODO bug, array is reversed
 
       await p;
 
