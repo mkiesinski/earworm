@@ -281,24 +281,41 @@ class MediaPlayer {
     }
   };
 
+  pickRandomMediaFromPrefix(alert) {
+    let media;
+    // Try to match with if there is a number
+    const pattern = new RegExp("^"+alert+"([0-9]+)");
+
+    const matches = Object.keys(this.mediaIndex)
+      .filter((key) => pattern.test(key))
+
+    const mediaKey = matches[Math.floor(Math.random() * matches.length)];
+
+    media = this.mediaIndex[mediaKey];
+
+    return media;
+  }
+
   async commandAlert(alert) {
     let media = this.mediaIndex[alert];
 
     if(!media) {
-      // Try to match with if there is a number
-      const pattern = new RegExp("^"+alert+"([0-9]+)");
-
-      const matches = Object.keys(this.mediaIndex)
-        .filter((key) => pattern.test(key))
-
-      const mediaKey = matches[Math.floor(Math.random() * matches.length)];
-
-      media = this.mediaIndex[mediaKey];
+      media = this.pickRandomMediaFromPrefix(alert);
     }
 
     if(alert.includes("+")) {
       media = alert.split("+")
-        .map((m) => this.mediaIndex[m])
+        .map((m) => m.trim())
+        .map((m) => m.replace(/^!/, ''))
+        .map((m) => {
+          let media = this.mediaIndex[m];
+
+          if(!media) {
+            media = this.pickRandomMediaFromPrefix(m);
+          }
+
+          return media;
+        })
         .map((m) => `${baseUrl}/${m.url}`)
       ;
 

@@ -348,33 +348,67 @@ describe('MediaPlayerBuilder', () => {
       expect(player.queueAlert).toHaveBeenCalledWith("./media/foo1");
     });
 
-    test('queue sfx multiple', async () => {
-      fetch.mockImplementationOnce(() => Promise.resolve({
-        json: () => Promise.resolve({
-          media: {
-            "foo1": {
-              url: "foo"
-            },
-            "foo2": {
-              url: "foo"
-            },
-            "bar": {
-              url: "bar"
+    describe('queue sfx composite', () => {
+
+      let player;
+
+      beforeEach(async () => {
+        fetch.mockImplementationOnce(() => Promise.resolve({
+          json: () => Promise.resolve({
+            media: {
+              "foo1": {
+                url: "foo"
+              },
+              "foo2": {
+                url: "foo"
+              },
+              "bar": {
+                url: "bar"
+              }
             }
-          }
-        })
-      }));
+          })
+        }));
 
-      const player = await MediaPlayer("http://example.com/foo.json");
+        player = await MediaPlayer("http://example.com/foo.json");
+        player.queueAlert = jest.fn();
 
-      player.queueAlert = jest.fn();
+      });
 
-      await ComfyJSMock.onCommand("FAKEUSER", "foo1+foo2", "");
+      test('foo1+bar', async () => {
+        await ComfyJSMock.onCommand("FAKEUSER", "foo1+bar", "");
 
-      expect(player.queueAlert).toHaveBeenCalledWith([
-        "./media/foo",
-        "./media/foo",
-      ]);
+        expect(player.queueAlert).toHaveBeenCalledWith([
+          "./media/foo",
+          "./media/bar",
+        ]);
+      });
+
+      test('foo1 + bar', async () => {
+        await ComfyJSMock.onCommand("FAKEUSER", "foo1 + bar", "");
+
+        expect(player.queueAlert).toHaveBeenCalledWith([
+          "./media/foo",
+          "./media/bar",
+        ]);
+      });
+
+      test('foo1 + !bar', async () => {
+        await ComfyJSMock.onCommand("FAKEUSER", "foo1 + !bar", "");
+
+        expect(player.queueAlert).toHaveBeenCalledWith([
+          "./media/foo",
+          "./media/bar",
+        ]);
+      });
+
+      test('foo+bar', async () => {
+        await ComfyJSMock.onCommand("FAKEUSER", "foo + !bar", "");
+
+        expect(player.queueAlert).toHaveBeenCalledWith([
+          "./media/foo",
+          "./media/bar",
+        ]);
+      });
     });
 
   });
