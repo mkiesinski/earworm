@@ -383,8 +383,26 @@ describe('MediaPlayerBuilder', () => {
         ]);
       });
 
+      test('foo1+bar', async () => {
+        await ComfyJSMock.onCommand("FAKEUSER", "foo1", "+bar");
+
+        expect(player.queueAlert).toHaveBeenCalledWith([
+          "./media/foo",
+          "./media/bar",
+        ]);
+      });
+
       test('foo1 + bar', async () => {
         await ComfyJSMock.onCommand("FAKEUSER", "foo1 + bar", "");
+
+        expect(player.queueAlert).toHaveBeenCalledWith([
+          "./media/foo",
+          "./media/bar",
+        ]);
+      });
+
+      test('foo1 + bar', async () => {
+        await ComfyJSMock.onCommand("FAKEUSER", "foo1", "+ bar");
 
         expect(player.queueAlert).toHaveBeenCalledWith([
           "./media/foo",

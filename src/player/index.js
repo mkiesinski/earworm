@@ -74,6 +74,10 @@ class MediaPlayer {
           command = command + message;
         }
 
+        if(/\+/.test(message)) {
+          command = command + message;
+        }
+
         if(/^r$/.test(command)) {
           command = ""; // random
         }
