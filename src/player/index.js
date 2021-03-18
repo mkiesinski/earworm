@@ -269,7 +269,6 @@ class MediaPlayer {
           type: this.determineAlertType(k),
         }
       });
-          console.log(alert);
     } else {
       alert.type = this.determineAlertType(key);
     }
