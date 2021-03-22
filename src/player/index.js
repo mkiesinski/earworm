@@ -21,9 +21,10 @@ function shuffle(array) {
   return array;
 }
 
-class MediaPlayer {
-  constructor(mediaIndexUrl) {
+export class MediaPlayer {
+  constructor(mediaIndexUrl, rootElement) {
     this.mediaIndexUrl = mediaIndexUrl;
+    this.rootElement = rootElement;
   }
 
   async testInteraction() {
@@ -119,7 +120,7 @@ class MediaPlayer {
 
 
   getMediaHandler(key) {
-    const root = document.querySelector('body');
+    const root = this.rootElement || document.querySelector('body');
 
     const mediaHandler = {
       composite: async (alert, muted, timeout) => {

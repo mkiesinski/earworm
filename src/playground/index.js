@@ -1,49 +1,54 @@
 const mediaIndexUrl = require('!file-loader?name=media/index.json!val-loader!../media').default;
 
-
-
-
-//const init = async () => {
-  //const mediaIndex = await fetch(mediaIndexUrl)
-    //.then(r => r.json())
-    //.then(j => j.media);
-  //;
-
-  //const root = document.querySelector('#root');
-
-  //let keys = Object.keys(mediaIndex)
-    //.filter(k => k)
-    //.filter(k => k !== '.DS_Store')
-  //;
-
-  //// TODO
-  //const sort = new URLSearchParams(location.search).get("sort")
-
-  //if(sort === "mtime") {
-    //keys = keys.sort((a,b) => {
-      //const aa = mediaIndex[a].mtime;
-      //const bb = mediaIndex[b].mtime;
-      //return bb.localeCompare(aa);
-    //});
-  //}
-
-  //console.log(keys);
-
-  //root.innerHTML = `
-  //<form>
-    //<div class='buttons'>
-      //${keys.map(k => `<a class='button is-fullwidth' target='_blank' href="media/${mediaIndex[k].url}">${k}</a>`).join('')}
-    //</div>
-  //</div>
-  //`;
-//}
-
-//init();
-
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { render } from "react-dom";
 
-function MediaList({ mediaIndex = {}, sort = "alpha", filter = null }) {
+import MediaPlayerContainer from './components/MediaPlayerContainer';
+
+import { DefaultAppContext, AppContext } from './components/AppContext';
+
+function getMediaType({ url }) {
+  let type = "";
+
+  if(/\.(mp4|mkv|webm)$/.test(url)) {
+    type = "video";
+  }
+
+  if(/\.(ogg|opus|mp3|m4a)$/.test(url)) {
+    type = "audio";
+  }
+
+  if(/\.(gif|jpeg|png)/.test(url)) {
+    type = "image";
+  }
+
+  return type;
+}
+
+function MediaIcon({ url }) {
+  let iconClassName = "";
+
+  let type = getMediaType({ url })
+
+  switch(type) {
+    case "video":
+      iconClassName = "fa-file-video-o";
+      break;
+    case "audio":
+      iconClassName = "fa-file-audio-o";
+      break;
+    case "image":
+    iconClassName = "fa-film";
+      break;
+  }
+
+  return (
+    <i className={`fa ${iconClassName}`}></i>
+  );
+}
+
+function MediaList({ mediaIndex = {}, sort = "alpha", filter = null, type = "" }) {
+  const ctx = useContext(AppContext);
 
   let keys = Object.keys(mediaIndex)
     .filter(k => k.url  !== '.DS_Store')
@@ -66,10 +71,34 @@ function MediaList({ mediaIndex = {}, sort = "alpha", filter = null }) {
     });
   }
 
+  if(type) {
+    keys = keys.filter(k => {
+      const { url } = mediaIndex[k];
+
+      let matchesType = (getMediaType({ url }) === type);
+
+      return matchesType;
+    });
+  }
+
+  const onClick = (commandKey) => (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    console.log(commandKey);
+
+    ctx.setCommandKey(commandKey);
+  };
+
   return (
     <div className="buttons">
       {keys.map((k) => (
-        <a key={k} className='button is-fullwidth is-primary' target='_blank' href={`media/${mediaIndex[k].url}`}>{k}</a>
+        <a key={k} onClick={onClick(k)} className='button is-fullwidth is-link' target='_blank' href={`media/${mediaIndex[k].url}`}>
+          <span className="icon is-small">
+            <MediaIcon url={mediaIndex[k].url} />
+          </span>
+          <span>{k}</span>
+        </a>
       ))}
     </div>
   );
@@ -82,6 +111,8 @@ function App() {
     sort: "date",
     filter: null
   })
+
+  const [commandKey, setCommandKey] = useState(null);
 
   React.useEffect(() => {
     (async function() {
@@ -97,7 +128,6 @@ function App() {
   const updateFilter = (e) => {
     e.stopPropagation();
 
-    console.log(e.target.value);
 
     setOptions((o) => ({
       ...o,
@@ -126,13 +156,46 @@ function App() {
     }));
   };
 
+  const updateType = (e) => {
+    e.stopPropagation();
+
+    setOptions((o) => ({
+      ...o,
+      type: e.target.value
+    }));
+  };
+
   return (
+    <DefaultAppContext>
     <div className='container'>
+      <MediaPlayerContainer commandKey={commandKey} />
       <form>
         <div className="field">
           <label className="label">Filter</label>
           <div className="control">
             <input className="input" type="text" placeholder="Filter" onChange={updateFilter} />
+          </div>
+        </div>
+
+       <div className="field">
+          <label className="label">Type</label>
+          <div className="control">
+            <label className="radio">
+              <input type="radio" name="type" value="" onClick={updateType} />
+              Any
+            </label>
+            <label className="radio">
+              <input type="radio" name="type" value="audio" onClick={updateType} />
+              Audio
+            </label>
+            <label className="radio">
+              <input type="radio" name="type" value="video" onClick={updateType} />
+              Video
+            </label>
+            <label className="radio">
+              <input type="radio" name="type" value="image" onClick={updateType} />
+              Image
+            </label>
           </div>
         </div>
 
@@ -158,6 +221,7 @@ function App() {
       <hr />
       <MediaList mediaIndex={mediaIndex} {...options} />
     </div>
+  </DefaultAppContext>
   );
 }
 
