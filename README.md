@@ -93,11 +93,18 @@ npm build
 
 The `dist/` folder will contain static files that can be uploaded to an http server (or S3).
 
-4. Start your local http server
+4. Start local Express server
 
-4. [Generate a twitch token (optional)](./#generating-oauth-token)
+```
+npm run local
+```
 
-5. Add your browser source to point to the root of web folder
+The application will be available under `http://localhost:30000`.
+You can alternatively start your http server of choice.
+
+5. [Generate a twitch token (optional)](./#generating-oauth-token)
+
+6. Add your browser source to point to the root of web folder
 
 Be sure to add `twitch_channel` and `twitch_token` in the query parameters
 
