@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack serve",
     "test": "jest src/",
-    "build": "webpack"
+    "build": "webpack",
+    "local": "node express.js"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "webpack-dev-server": "^3.11.1"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   }
