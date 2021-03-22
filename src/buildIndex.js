@@ -1,6 +1,6 @@
 const logger = console;
 
-const { resolve } = require('path');
+const { resolve, sep } = require('path');
 const { readdir, writeFile } = require('fs').promises;
 
 async function* getFiles(dir) {
@@ -24,7 +24,7 @@ async function getMediaFiles() {
 
   for await (const file of files) {
     // Remove the prefix
-    let item = file.replace(prefix + '/', '');
+    let item = file.replace(prefix + sep, '').split(sep).join('/');
 
     let key = item
       .replace(/\..*/, '')

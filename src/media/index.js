@@ -1,6 +1,6 @@
 const { logger } = require('../logger');
 
-const { resolve } = require('path');
+const { resolve, sep } = require('path');
 const { readdir, writeFile, stat } = require('fs').promises;
 
 async function* getFiles(dir) {
@@ -29,7 +29,7 @@ async function getMediaFiles() {
     let item = {
       mtime: stats.mtime,
       birthtime: stats.birthtime,
-      url: file.replace(prefix + '/', ''),
+      url: file.replace(prefix + sep, '').split(sep).join('/'),
     };
 
     let key = item.url
