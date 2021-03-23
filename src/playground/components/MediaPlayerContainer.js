@@ -10,6 +10,7 @@ const rootStyle = {
 const playerStyle = {
   height: "100%",
   textAlign: "center",
+  position: "relative",
 };
 
 const mediaIndexUrl = require('!file-loader?name=media/index.json!val-loader!../../media').default;
