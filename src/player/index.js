@@ -132,6 +132,12 @@ export class MediaPlayer {
           ComfyJS.Say('Many thanks to the friend of the stream @alexjpaz! Make sure you spin to his channel at https://twitch.tv/alexjpaz and donate some sand! GorillaSpin');
         }
 
+        if(/nuzlocke/.test(command)) {
+          ComfyJS.Say("Nuzlocke rules: 1. Any Pokemon that faints is considered dead and must be put in Storage System permanently "
+          + "| 2. The player may only catch the first wild Pokemon encountered in each area and none else. No second chanes if the Pokemon flees or faints. "
+          + "| 3. The player must nickname all of their Pokemon for the sake of forming stronger emotional bonds.");
+        }
+
         await this.commandAlert(command);
       }
     }
