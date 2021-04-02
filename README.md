@@ -88,7 +88,7 @@ Local hosting will require you to build the application and [host the files on a
 
 ```
 npm i
-npm build
+npm run build
 ```
 
 The `dist/` folder will contain static files that can be uploaded to an http server (or S3).
