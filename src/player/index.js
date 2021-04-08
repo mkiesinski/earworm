@@ -30,7 +30,7 @@ class timedMessages {
       
       this.messages = [
           `Type !sfx to list available sound commands. You can also use !sfx latest for recently added sound commands.`,
-          `Available commands: !sfx, !dndcaracter`
+          `Available commands: !sfx, !dndcharacter`
       ];
   }
 
