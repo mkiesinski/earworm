@@ -29,8 +29,9 @@ class timedMessages {
       this.timer = 20;
       
       this.messages = [
+          `Want to stay informed? I have a discord channel! Join in at https://discord.gg/gD86QqPY`,
           `Type !sfx to list available sound commands. You can also use !sfx latest for recently added sound commands.`,
-          `Available commands: !sfx, !dndcharacter`
+          `Available commands: !sfx, !discord, !dndcharacter`
       ];
   }
 
@@ -108,7 +109,16 @@ export class MediaPlayer {
 
       if(/sfx/.test(command)) {
         await this.listSfx(user, command, message, flags, extra);
-      } if(/dndcharacter/.test(command)) {
+      } 
+      if(/discord/.test(message)) {
+        ComfyJS.Say('Want to stay informed? I have a discord channel! Join in at https://discord.gg/gD86QqPY');
+      }
+      if(/nuzlocke/.test(command)) {
+        ComfyJS.Say("Nuzlocke rules: 1. Any Pokemon that faints is considered dead and must be put in Storage System permanently "
+        + "| 2. The player may only catch the first wild Pokemon encountered in each area and none else. No second chanes if the Pokemon flees or faints. "
+        + "| 3. The player must nickname all of their Pokemon for the sake of forming stronger emotional bonds.");
+      }      
+      if(/dndcharacter/.test(command)) {
         ComfyJS.Say(getDndCharacter(user));
       } else {
         if(/^[0-9]+/.test(message)) {
@@ -130,12 +140,6 @@ export class MediaPlayer {
   
         if(/alexjpaz/.test(command)) {
           ComfyJS.Say('Many thanks to the friend of the stream @alexjpaz! Make sure you spin to his channel at https://twitch.tv/alexjpaz and donate some sand! GorillaSpin');
-        }
-
-        if(/nuzlocke/.test(command)) {
-          ComfyJS.Say("Nuzlocke rules: 1. Any Pokemon that faints is considered dead and must be put in Storage System permanently "
-          + "| 2. The player may only catch the first wild Pokemon encountered in each area and none else. No second chanes if the Pokemon flees or faints. "
-          + "| 3. The player must nickname all of their Pokemon for the sake of forming stronger emotional bonds.");
         }
 
         await this.commandAlert(command);
