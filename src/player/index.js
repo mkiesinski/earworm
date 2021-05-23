@@ -110,7 +110,7 @@ export class MediaPlayer {
       if(/sfx/.test(command)) {
         await this.listSfx(user, command, message, flags, extra);
       } 
-      if(/discord/.test(message)) {
+      if(/discord/.test(command)) {
         ComfyJS.Say('Want to stay informed? I have a discord channel! Join in at https://discord.gg/gD86QqPY');
       }
       if(/nuzlocke/.test(command)) {
