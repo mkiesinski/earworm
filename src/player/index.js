@@ -29,7 +29,7 @@ class timedMessages {
       this.timer = 20;
       
       this.messages = [
-          `Want to stay informed? I have a discord channel! Join in at https://discord.gg/gD86QqPY`,
+          `Want to stay informed? I have a discord channel! Join in at https://discord.gg/ynqHx5Kp6e`,
           `Type !sfx to list available sound commands. You can also use !sfx latest for recently added sound commands.`,
           `Available commands: !sfx, !discord, !dndcharacter`
       ];
@@ -111,7 +111,7 @@ export class MediaPlayer {
         await this.listSfx(user, command, message, flags, extra);
       } 
       if(/discord/.test(command)) {
-        ComfyJS.Say('Want to stay informed? I have a discord channel! Join in at https://discord.gg/gD86QqPY');
+        ComfyJS.Say('Want to stay informed? I have a discord channel! Join in at https://discord.gg/ynqHx5Kp6e');
       }
       if(/nuzlocke/.test(command)) {
         ComfyJS.Say("Nuzlocke rules: 1. Any Pokemon that faints is considered dead and must be put in Storage System permanently "
