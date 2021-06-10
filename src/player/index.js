@@ -26,7 +26,7 @@ class timedMessages {
   constructor() {
       this.count = 0;
       this.pointer = 0;
-      this.timer = 20;
+      this.timer = 40;
       
       this.messages = [
           `Want to stay informed? I have a discord channel! Join in at https://discord.gg/ynqHx5Kp6e`,
