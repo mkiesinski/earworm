@@ -469,6 +469,7 @@ export class MediaPlayer {
     output += " ("+selected.length+"/"+totalKeys+")";
 
     ComfyJS.Say(output);
+    ComfyJS.Say("Check out the SFX playground at https://earworm.felicoder.com/playground");
   };
 }
 
