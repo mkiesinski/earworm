@@ -31,7 +31,8 @@ class timedMessages {
       this.messages = [
           `Want to stay informed? I have a discord channel! Join in at https://discord.gg/ynqHx5Kp6e`,
           `Type !sfx to list available sound commands. You can also use !sfx latest for recently added sound commands.`,
-          `Available commands: !sfx, !discord, !dndcharacter`
+          `Available commands: !sfx, !discord, !dndcharacter`,
+          `October is PS2 Survival Horror month during wich there will be a Silent Hill mega stream! TBA`
       ];
   }
 
